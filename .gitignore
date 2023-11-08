@@ -8,7 +8,7 @@
 # Crash log files
 crash.log
 .vscode
-backups
+*.backups
 # Ignore any .tfvars files that are automatically generated
 *.auto.tfvars
 
