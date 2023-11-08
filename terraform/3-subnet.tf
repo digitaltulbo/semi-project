@@ -7,7 +7,7 @@ resource "aws_subnet" "public_subnet_a" {
   tags = {
     "Name" = "Web a"
     "kubernetes.io/role/elb" = "1"
-    "kubernetes.io/cluster/demo" = "owned"
+    "kubernetes.io/cluster/smp" = "owned"
   }
 }
 
@@ -19,7 +19,7 @@ resource "aws_subnet" "public_subnet_c" {
   tags = {
     "Name" = "Web c"
     "kubernetes.io/role/elb" = "1"
-    "kubernetes.io/cluster/demo" = "owned"
+    "kubernetes.io/cluster/smp" = "owned"
   }
 }
 // Create private subnet a,c
@@ -30,7 +30,7 @@ resource "aws_subnet" "private_subnet_a" {
   tags = {
     Name = "App a"
     "kubernetes.io/role/internal-elb" = "1"
-    "kubernetes.io/cluster/demo" = "owned"
+    "kubernetes.io/cluster/smp" = "owned"
   }
 }
 
@@ -41,6 +41,6 @@ resource "aws_subnet" "private_subnet_c" {
   tags = {
     "Name" = "App c"
     "kubernetes.io/role/internal-elb" = "1"
-    "kubernetes.io/cluster/demo" = "owned"
+    "kubernetes.io/cluster/smp" = "owned"
   }
 }
