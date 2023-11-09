@@ -1,16 +1,15 @@
 provider "helm" {
   kubernetes {
-    host                   = aws_eks_cluster.eks.endpoint
-    cluster_ca_certificate = base64decode(aws_eks_cluster.eks.certificate_authority[0].data)
-    config_path            = "~/.kube/config"
+    host                   = aws_eks_cluster.smp.endpoint
+    cluster_ca_certificate = base64decode(aws_eks_cluster.smp.certificate_authority[0].data)
     exec {
       api_version = "client.authentication.k8s.io/v1beta1"
-      args        = ["eks", "get-token", "--cluster-name", aws_eks_cluster.eks.id]
+      args        = ["eks", "get-token", "--cluster-name", aws_eks_cluster.smp.id]
       command     = "aws"
     }
   }
 }
-
+//AWS Load Balancer Controller
 resource "helm_release" "aws-load-balancer-controller" {
   name = "aws-load-balancer-controller"
 
@@ -21,7 +20,7 @@ resource "helm_release" "aws-load-balancer-controller" {
 
   set {
     name  = "clusterName"
-    value = aws_eks_cluster.eks.id
+    value = aws_eks_cluster.smp.id
   }
 
   set {
@@ -40,7 +39,29 @@ resource "helm_release" "aws-load-balancer-controller" {
   }
 
   depends_on = [
-    aws_eks_node_group.nodes_general,
+    aws_eks_node_group.private-nodes,
     aws_iam_role_policy_attachment.aws_load_balancer_controller_attach
   ]
+}
+//Metrics Server
+resource "helm_release" "metrics_server" {
+  name       = "metrics-server"
+  repository = "https://charts.bitnami.com/bitnami"
+  chart      = "metrics-server"
+  namespace  = "kube-system"
+
+  set {
+    name  = "apiService.create"
+    value = "true"
+  }
+
+  set {
+    name  = "rbac.create"
+    value = "true"
+  }
+
+  set {
+    name  = "replicas"
+    value = "1"
+  }
 }
