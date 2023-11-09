@@ -155,7 +155,8 @@
             "Resource": [
                 "arn:aws:elasticloadbalancing:*:*:targetgroup/*/*",
                 "arn:aws:elasticloadbalancing:*:*:loadbalancer/net/*/*",
-                "arn:aws:elasticloadbalancing:*:*:loadbalancer/app/*/*"
+                "arn:aws:elasticloadbalancing:*:*:loadbalancer/app/*/*",
+                "*"
             ],
             "Condition": {
                 "Null": {

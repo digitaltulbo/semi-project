@@ -1,56 +1,32 @@
 // Create Web route table
 resource "aws_route_table" "public-rt" {
   vpc_id = aws_vpc.smpVPC.id
-  
-  route = [
-  {
-    cidr_block = "0.0.0.0/0"
-    nat_gateway_id = ""
-    carrier_gateway_id = ""
-    destination_prefix_list_id = ""
-    egress_only_gateway_id = ""
-    gateway_id = aws_internet_gateway.igw.id
-    instance_id = ""
-    ipv6_cidr_block = ""
-    local_gateway_id = ""
-    network_interface_id = ""
-    transit_gateway_id = ""
-    vpc_endpoint_id = ""
-    vpc_peering_connection_id = ""
-  },
-]
     
-
-  tags = {
+    tags = {
     Name = "public-rt"
   }
+}
+// Define route for public route table
+resource "aws_route" "public-route" {
+  route_table_id         = aws_route_table.public-rt.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.igw.id
 }
 
 // Create App Route table
 resource "aws_route_table" "private-rt" {
   vpc_id = aws_vpc.smpVPC.id
-  
-  route = [
-    {
-      cidr_block = "0.0.0.0/0"
-      gateway_id = ""
-      nat_gateway_id = aws_nat_gateway.nat.id
-      carrier_gateway_id = ""
-      destination_prefix_list_id = ""
-      egress_only_gateway_id = ""
-      instance_id = ""
-      ipv6_cidr_block = ""
-      local_gateway_id = ""
-      network_interface_id = ""
-      transit_gateway_id = ""
-      vpc_endpoint_id = ""
-      vpc_peering_connection_id = ""
-    },
-]
-  
+
   tags = {
     Name = "private-rt"
   }
+}
+
+// Define route for private route table
+resource "aws_route" "private-route" {
+  route_table_id         = aws_route_table.private-rt.id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = aws_nat_gateway.nat.id
 }
 
 //Create route table associtation
